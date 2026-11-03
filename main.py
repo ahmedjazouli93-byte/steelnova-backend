@@ -30,13 +30,15 @@ app.add_middleware(
 
 client = genai.Client(api_key=api_key)
 
+# Load a concise version or handle the knowledge base safely
 knowledge_file = "steelnova_catalog_knowledge.md"
-system_instruction = "Vous êtes l'assistant IA officiel de STEELNOVA SOLUTIONS, entreprise spécialisée dans la distribution d'acier au Maroc."
+system_instruction = "Vous êtes l'assistant IA officiel de STEELNOVA SOLUTIONS, entreprise spécialisée dans la distribution d'acier au Maroc (Casablanca)."
 
 if os.path.exists(knowledge_file):
     with open(knowledge_file, "r", encoding="utf-8") as f:
         catalog_content = f.read()
-        system_instruction += f"\n\nVoici le catalogue et la base de connaissances de STEELNOVA SOLUTIONS:\n{catalog_content}"
+        # Truncate if too long to prevent token-rate quota blocks on free tier
+        system_instruction += f"\n\nCatalogue/Infos:\n{catalog_content[:3000]}"
 
 class ChatRequest(BaseModel):
     message: str
@@ -50,34 +52,21 @@ async def chat(req: ChatRequest):
     if not req.message or not req.message.strip():
         raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-    # Free tier automatic retry loop for rate limits (429 / 503)
-    max_retries = 2
-    delay = 2
-    
-    for attempt in range(max_retries + 1):
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.8-flash',
-                contents=req.message,
-                config=types.GenerateContentConfig(
-                    system_instruction=system_instruction,
-                    temperature=0.3,
-                )
+    try:
+        response = client.models.generate_content(
+            model='gemini-3.5-flash-lite',
+            contents=req.message,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                temperature=0.3,
             )
-            return {"reply": response.text}
-        except Exception as e:
-            error_msg = str(e)
-            # If it's a rate limit or high demand error and we have retries left, wait and loop
-            if ("503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg) and attempt < max_retries:
-                time.sleep(delay)
-                delay *= 2  # Exponential backoff
-                continue
-            
-            # If out of retries, return a friendly message instead of a crash
-            if "503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg:
-                return {"reply": "L'assistant est très demandé pour le moment. Veuillez patienter une petite seconde et réessayer."}
-            
-            raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
+        )
+        return {"reply": response.text}
+    except Exception as e:
+        error_msg = str(e)
+        if "503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg:
+            return {"reply": "Veuillez patienter quelques secondes entre vos messages (limite du plan gratuit)."}
+        raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
 
 if __name__ == "__main__":
     import uvicorn
