@@ -1,5 +1,33 @@
-# Steelnova Solutions - Base de Connaissances
-- Activité : Distribution en gros et au détail de produits sidérurgiques, aciers, profilés en acier et découpe laser.
-- Siège & Dépôt : Casablanca, Maroc.
-- Produits principaux : Tubes ronds, carrés et rectangulaires, tôles (noires, galvanisées, antidérapantes, perforées), ronds à béton, treillis soudés, aciers spéciaux et industriels.
-- Services : Stock permanent à Casablanca, découpe sur mesure selon cahier des charges, livraison rapide sur Casablanca et tout le Maroc.
+# Base de Connaissances - STEELNOVA SOLUTIONS SARL
+
+## 1. Identité & Présentation
+- **Nom de l'entreprise :** STEELNOVA SOLUTIONS SARL
+- **Siège / Localisation :** Casablanca, Maroc (avec livraison nationale).
+- **Activité principale :** Commercialisation, import et distribution de produits métallurgiques à destination des professionnels (BTP, industries, fabricants métalliques).
+- **Mission :** Approvisionner durablement les acteurs économiques du Maroc en solutions acier de qualité, en garantissant disponibilité, conformité et excellence de service.
+- **Valeurs :** Fiabilité (engagements tenus), Qualité (origine et conformité), Proximité (relation de confiance et accompagnement), Performance (optimisation des coûts et de la chaîne logistique).
+
+## 2. Gamme de Produits
+- **Tubes en acier**
+- **Poutrelles & Profilés**
+- **Tôles d'acier**
+- **Produits galvanisés**
+- **Acier inoxydable**
+- **Aciers spéciaux**
+
+## 3. Services & Prestations sur Mesure
+- **Commercialisation :** Approvisionnement régulier ou ponctuel selon les besoins.
+- **Import & Sourcing :** Sourcing international auprès de producteurs reconnus avec contrôle qualité.
+- **Support Logistique :** Gestion des flux, stock dédié, planification des livraisons et livraison sur tout le territoire marocain depuis Casablanca.
+- **Procurement Projet :** Accompagnement complet pour appels d'offres et grands chantiers.
+- **Prestations sur mesure / Transformations :** 
+  - Découpe laser, plasma, oxycoupage, jet d'eau
+  - Poinçonnage, perçage
+  - Roulage, pliage, cintrage
+  - Tôles perforées selon plans et cahiers des charges
+
+## 4. Informations Pratiques & Contact
+- **Zone de livraison :** National (du Nord au Sud, zones urbaines et sites industriels depuis Casablanca).
+- **Téléphone :** +212 700 345 839
+- **Email :** contact@steelnova.ma
+- **Site web :** steelnova.ma
