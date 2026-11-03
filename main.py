@@ -17,11 +17,10 @@ if not api_key:
     raise RuntimeError("GEMINI_API_KEY environment variable is missing.")
 
 # Email Configuration
-NOTIFICATION_EMAIL = os.environ.get("NOTIFICATION_EMAIL")
-SMTP_USER = os.environ.get("SMTP_USER")
+NOTIFICATION_EMAIL = os.environ.get("NOTIFICATION_EMAIL", "contact@steelnova.ma")
+SMTP_USER = os.environ.get("SMTP_USER", "contact@steelnova.ma")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
+SMTP_HOST = os.environ.get("SMTP_HOST", "webhosting3007.is.cc")
 
 app = FastAPI(title="Steelnova AI Backend")
 
@@ -69,12 +68,11 @@ class TranscriptRequest(BaseModel):
     user_contact: Optional[str] = None
 
 def send_full_transcript_email(messages: List[MessageItem], user_contact: Optional[str] = None):
-    """Sends a single summary email containing the entire conversation transcript."""
+    """Sends a single summary email using SSL (Port 465) for webhosting3007.is.cc."""
     if not all([NOTIFICATION_EMAIL, SMTP_USER, SMTP_PASSWORD]):
         print("Email environment variables missing. Transcript email skipped.")
         return
 
-    # Build clear transcript formatting
     formatted_transcript = ""
     for msg in messages:
         label = "👤 CLIENT" if msg.sender.lower() == "user" else "🤖 ASSISTANT"
@@ -106,12 +104,12 @@ Steelnova AI Assistant
     msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
     try:
-        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
-        server.starttls()
+        # Use SMTP_SSL for port 465
+        server = smtplib.SMTP_SSL(SMTP_HOST, 465)
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.sendmail(SMTP_USER, NOTIFICATION_EMAIL, msg.as_string())
         server.quit()
-        print("Full conversation transcript email successfully sent.")
+        print("Full conversation transcript email successfully sent to contact@steelnova.ma.")
     except Exception as e:
         print(f"Failed to send transcript email: {str(e)}")
 
