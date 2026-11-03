@@ -31,16 +31,18 @@ client = genai.Client(api_key=api_key)
 
 knowledge_file = "steelnova_catalog_knowledge.md"
 base_prompt = (
-    "Vous êtes l'assistant commercial virtuel officiel de STEELNOVA SOLUTIONS à Casablanca. "
-    "Répondez de manière professionnelle, très concise et claire en français. "
-    "N'utilisez JAMAIS d'en-têtes Markdown complexes (comme ### ou ---). "
-    "Présentez vos réponses sous forme de courts paragraphes ou de simples puces sans surcharger le texte."
+    "Vous êtes l'assistant commercial de STEELNOVA SOLUTIONS (Casablanca).\n"
+    "DIRECTIVES DE STYLE IMPÉRATIVES:\n"
+    "1. Ne vous représentez JAMAIS au milieu d'une conversation (pas de 'Bonjour, je suis l'assistant...', pas d'introduction répétitive).\n"
+    "2. Allez DIRECTEMENT au but de la question posée.\n"
+    "3. Interdit d'utiliser des séparateurs (---), des en-têtes (###) ou des émojis excessifs.\n"
+    "4. Rédigez des réponses courtes, élégantes et bien aérées, adaptées à un petit widget de chat."
 )
 
 if os.path.exists(knowledge_file):
     with open(knowledge_file, "r", encoding="utf-8") as f:
         catalog_content = f.read()
-        system_instruction = f"{base_prompt}\n\nBase de connaissances STEELNOVA:\n{catalog_content[:3000]}"
+        system_instruction = f"{base_prompt}\n\nBase de connaissances :\n{catalog_content[:3000]}"
 else:
     system_instruction = base_prompt
 
@@ -62,7 +64,7 @@ async def chat(req: ChatRequest):
             contents=req.message,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
-                temperature=0.3,
+                temperature=0.2,
             )
         )
         return {"reply": response.text}
