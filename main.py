@@ -1,4 +1,5 @@
 import os
+import time
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -49,21 +50,34 @@ async def chat(req: ChatRequest):
     if not req.message or not req.message.strip():
         raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-    try:
-        response = client.models.generate_content(
-            model='gemini-3.8-flash',
-            contents=req.message,
-            config=types.GenerateContentConfig(
-                system_instruction=system_instruction,
-                temperature=0.3,
+    # Free tier automatic retry loop for rate limits (429 / 503)
+    max_retries = 2
+    delay = 2
+    
+    for attempt in range(max_retries + 1):
+        try:
+            response = client.models.generate_content(
+                model='gemini-3.8-flash',
+                contents=req.message,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction,
+                    temperature=0.3,
+                )
             )
-        )
-        return {"reply": response.text}
-    except Exception as e:
-        error_msg = str(e)
-        if "503" in error_msg or "UNAVAILABLE" in error_msg:
-            return {"reply": "L'assistant est actuellement très sollicité. Veuillez réessayer dans un instant."}
-        raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
+            return {"reply": response.text}
+        except Exception as e:
+            error_msg = str(e)
+            # If it's a rate limit or high demand error and we have retries left, wait and loop
+            if ("503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg) and attempt < max_retries:
+                time.sleep(delay)
+                delay *= 2  # Exponential backoff
+                continue
+            
+            # If out of retries, return a friendly message instead of a crash
+            if "503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg:
+                return {"reply": "L'assistant est très demandé pour le moment. Veuillez patienter une petite seconde et réessayer."}
+            
+            raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
 
 if __name__ == "__main__":
     import uvicorn
