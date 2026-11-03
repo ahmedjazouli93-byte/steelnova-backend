@@ -51,7 +51,7 @@ async def chat(req: ChatRequest):
         
     try:
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model='gemini-3.8-flash',
             contents=req.message,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
@@ -60,7 +60,10 @@ async def chat(req: ChatRequest):
         )
         return {"reply": response.text}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"AI Service Error: {str(e)}")
+        error_msg = str(e)
+        if "503" in error_msg or "UNAVAILABLE" in error_msg:
+            return {"reply": "L'assistant est actuellement très sollicité. Veuillez réessayer dans un instant."}
+        raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
 
 if __name__ == "__main__":
     import uvicorn
