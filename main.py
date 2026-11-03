@@ -1,5 +1,4 @@
 import os
-import time
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -30,15 +29,20 @@ app.add_middleware(
 
 client = genai.Client(api_key=api_key)
 
-# Load a concise version or handle the knowledge base safely
 knowledge_file = "steelnova_catalog_knowledge.md"
-system_instruction = "Vous êtes l'assistant IA officiel de STEELNOVA SOLUTIONS, entreprise spécialisée dans la distribution d'acier au Maroc (Casablanca)."
+base_prompt = (
+    "Vous êtes l'assistant commercial virtuel officiel de STEELNOVA SOLUTIONS à Casablanca. "
+    "Répondez de manière professionnelle, très concise et claire en français. "
+    "N'utilisez JAMAIS d'en-têtes Markdown complexes (comme ### ou ---). "
+    "Présentez vos réponses sous forme de courts paragraphes ou de simples puces sans surcharger le texte."
+)
 
 if os.path.exists(knowledge_file):
     with open(knowledge_file, "r", encoding="utf-8") as f:
         catalog_content = f.read()
-        # Truncate if too long to prevent token-rate quota blocks on free tier
-        system_instruction += f"\n\nCatalogue/Infos:\n{catalog_content[:3000]}"
+        system_instruction = f"{base_prompt}\n\nBase de connaissances STEELNOVA:\n{catalog_content[:3000]}"
+else:
+    system_instruction = base_prompt
 
 class ChatRequest(BaseModel):
     message: str
@@ -65,7 +69,7 @@ async def chat(req: ChatRequest):
     except Exception as e:
         error_msg = str(e)
         if "503" in error_msg or "429" in error_msg or "UNAVAILABLE" in error_msg:
-            return {"reply": "Veuillez patienter quelques secondes entre vos messages (limite du plan gratuit)."}
+            return {"reply": "Veuillez patienter quelques secondes entre vos messages."}
         raise HTTPException(status_code=500, detail=f"AI Service Error: {error_msg}")
 
 if __name__ == "__main__":
