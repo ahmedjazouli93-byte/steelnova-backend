@@ -6,17 +6,14 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-# Load environment variables from .env file (if running locally)
 load_dotenv()
 
-# Verify API Key availability
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
     raise RuntimeError("GEMINI_API_KEY environment variable is missing.")
 
 app = FastAPI(title="Steelnova AI Backend")
 
-# Enable CORS so steelnova.ma can communicate with this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -30,10 +27,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Google GenAI Client
-client = genai.Client()
+# Initialize client explicitly passing the key
+client = genai.Client(api_key=api_key)
 
-# Load Steelnova Catalog Knowledge Base
 knowledge_file = "steelnova_catalog_knowledge.md"
 system_instruction = "Vous êtes l'assistant IA officiel de STEELNOVA SOLUTIONS, entreprise spécialisée dans la distribution d'acier au Maroc."
 
@@ -42,7 +38,6 @@ if os.path.exists(knowledge_file):
         catalog_content = f.read()
         system_instruction += f"\n\nVoici le catalogue et la base de connaissances de STEELNOVA SOLUTIONS:\n{catalog_content}"
 
-# Define Request Body Model
 class ChatRequest(BaseModel):
     message: str
 
@@ -57,7 +52,7 @@ async def chat(req: ChatRequest):
         
     try:
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-2.5-flash',
             contents=req.message,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
