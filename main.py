@@ -39,9 +39,14 @@ app.add_middleware(
 
 client = genai.Client(api_key=api_key)
 
+# Load knowledge base ONCE at startup for maximum speed
 knowledge_file = "steelnova_catalog_knowledge.md"
 base_prompt = (
-    "Vous êtes l'assistant commercial virtuel officiel de STEELNOVA SOLUTIONS (Casablanca).\n"
+    "Vous êtes l'assistant commercial virtuel officiel de STEELNOVA SOLUTIONS, entreprise spécialisée dans la distribution d'acier et de produits sidérurgiques au Maroc (Casablanca).\n"
+    "INFORMATIONS DE CONTACT OFFICIELLES (À utiliser impérativement quand on vous demande les coordonnées) :\n"
+    "- Téléphone : +212 700 345 839\n"
+    "- Email : contact@steelnova.ma\n"
+    "- Ne donnez JAMAIS d'autres adresses email (interdit d'ajouter 'solutions' dans le domaine).\n\n"
     "DIRECTIVES DE STYLE IMPÉRATIVES:\n"
     "1. Ne vous représentez JAMAIS au milieu d'une conversation.\n"
     "2. Allez DIRECTEMENT au but de la question posée.\n"
@@ -104,7 +109,6 @@ Steelnova AI Assistant
     msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
     try:
-        # Use SMTP_SSL for port 465
         server = smtplib.SMTP_SSL(SMTP_HOST, 465)
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.sendmail(SMTP_USER, NOTIFICATION_EMAIL, msg.as_string())
