@@ -27,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize client explicitly passing the key
 client = genai.Client(api_key=api_key)
 
 knowledge_file = "steelnova_catalog_knowledge.md"
@@ -52,7 +51,7 @@ async def chat(req: ChatRequest):
         
     try:
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model='gemini-3.8-flash',
             contents=req.message,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
