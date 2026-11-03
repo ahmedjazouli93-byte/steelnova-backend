@@ -1,15 +1,5 @@
-# Steelnova Solutions - Knowledge Base
-
-## About Steelnova Solutions
-- **Location:** Zone Industrielle Sidi Bernoussi, Casablanca, Morocco.
-- **Activity:** Wholesale distribution and supply of raw metallurgical products, structural steel profiles, and precision laser cutting services.
-
-## Product Portfolio & Offerings
-- **Structural Steel Profiles:** HEA, HEB, IPE, UPN, IPN beams, equal/unequal angles, square/rectangular hollow sections.
-- **Tubes & Piping:** Seamless steel tubes, welded industrial tubes, galvanized pipes.
-- **Sheets & Plates:** Cold-rolled sheets, hot-rolled steel plates, galvanized sheets, stainless steel, aluminum plates.
-- **Services:** Custom industrial laser cutting, sheet metal shearing, bending, and custom cutting to spec.
-
-## Inquiries & Ordering
-- Deliveries dispatched directly from Casablanca across Morocco.
-- Custom quotes provided based on dimensions, thickness, and volume.
+# Steelnova Solutions - Base de Connaissances
+- Activité : Distribution en gros et au détail de produits sidérurgiques, aciers, profilés en acier et découpe laser.
+- Siège & Dépôt : Casablanca, Maroc.
+- Produits principaux : Tubes ronds, carrés et rectangulaires, tôles (noires, galvanisées, antidérapantes, perforées), ronds à béton, treillis soudés, aciers spéciaux et industriels.
+- Services : Stock permanent à Casablanca, découpe sur mesure selon cahier des charges, livraison rapide sur Casablanca et tout le Maroc.
